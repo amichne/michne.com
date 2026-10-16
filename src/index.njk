@@ -2,55 +2,34 @@
 layout: base.njk
 title: Home
 ---
-<div class="home">
-    <section class="intro">
-        <h1>╭─ [<a href="mailto:austin@michne.com">austin@michne.com</a>] ~/personal {<a href="https://github.com/amichne" style="color: #5C86DF">github</a>}
-            <br>
-            ╰─➤ cat /Users/amichne/README.md
-        </h1>
-
-        <h2> > Backend Engineer @ American Express</h2>
-        <h2> > Why write code when you could write bugs</h2>
-
-    </section>
-
-    <section class="recent-posts">
-        <h2>&RightTeeArrow; Recent Posts</h2>
-        <ul class="post-list">
-            {%- for post in collections.posts | reverse -%}
-                <li>
-                    <time>{{ post.date | readableDate }}</time>
-                    <a href="{{ post.url }}">{{ post.data.title }}</a>
-                </li>
-            {%- endfor -%}
-        </ul>
-        <a href="/posts/" class="more-link">view all posts &rarr;</a>
-    </section>
-    <section class="recent-photos">
-        <h2> &percnt; open &dollar;((&dollar;RANDOM &percnt; &dollar;#PHOTOS[@]}))</h2>
-        <div class="photo-main">
-            <a href="#" id="random-photo-link" class="photo-main"> <img id="random-photo-img" src="" alt="Random photo"
-                                                                        loading="lazy"> </a>
-        </div>
-        <a href="/photos/" class="more-link">view all photos &rarr;</a>
-    </section>
-</div>
-
-<script>
-    (function () {
-        const photos = [
-            {%- for photo in collections.photos -%}
-                {
-                    url: "{{ photo.url }}",
-                    image: "{{ photo.data.image }}",
-                    date: "{{ photo.data.date | readableDate }}"
-                }{% if not loop.last %},{% endif %}
-            {%- endfor -%}
-        ];
-
-        const randomPhoto = photos[Math.floor(Math.random() * photos.length)];
-        document.getElementById('random-photo-link').href = randomPhoto.url;
-        document.getElementById('random-photo-img').src = randomPhoto.image;
-        document.getElementById('random-photo-img').alt = 'Photo from ' + randomPhoto.date;
-    })();
-</script>
+<section class="intro" aria-labelledby="intro-title">
+    <h1 id="intro-title">╭─ [<a href="mailto:austin@michne.com">austin@michne.com</a>] ~/personal {<a href="https://github.com/amichne">github</a>}
+        <br>
+        ╰─➤ cat /Users/amichne/README.md
+    </h1>
+    <h2> &gt; Backend Engineer @ American Express</h2>
+    <h2> &gt; Why write code when you could write bugs</h2>
+</section>
+<section class="recent-posts" aria-labelledby="recent-notes">
+    <div class="section-heading"><h2 id="recent-notes">&RightTeeArrow; Recent Posts</h2><a class="utility-link" href="/posts/">view all posts <span class="link-arrow" aria-hidden="true">→</span></a></div>
+    <ol class="post-list">
+        {% for post in collections.posts %}
+        <li><time datetime="{{ post.date | isoDate }}">{{ post.date | readableDate }}</time><a href="{{ post.url }}"><span>{{ post.data.title }}</span><span class="link-arrow" aria-hidden="true">↗</span></a></li>
+        {% endfor %}
+    </ol>
+</section>
+{% set photos = collections.photos %}
+{% if photos.length %}
+{% set photo = photos[0] %}
+<section class="recent-photos" aria-labelledby="selected-frame">
+    <div class="section-heading"><h2 id="selected-frame" class="shell-heading">&percnt; open &dollar;((&dollar;RANDOM &percnt; &dollar;#PHOTOS[@]}))</h2><button class="utility-link shuffle-photo" type="button" hidden>Another frame <span class="link-arrow" aria-hidden="true">↗</span></button></div>
+    <figure class="archive-frame">
+        <a href="{{ photo.url }}" data-photo-link><img src="{{ photo.data.image }}" alt="Photograph from {{ photo.date | readableDate }}" data-photo-image fetchpriority="high"></a>
+        <figcaption><span data-photo-caption>{{ photo.data.camera }} <span class="meta-divider">/</span> {{ photo.date | readableDate }}</span><a class="utility-link" href="/photos/">view all photos <span class="link-arrow" aria-hidden="true">→</span></a></figcaption>
+    </figure>
+    <div class="photo-sources" hidden>
+        {% for entry in photos %}<span data-photo-src="{{ entry.data.image }}" data-photo-url="{{ entry.url }}" data-photo-date="{{ entry.date | readableDate }}" data-photo-camera="{{ entry.data.camera }}"></span>{% endfor %}
+    </div>
+    <p class="sr-only" data-photo-status aria-live="polite"></p>
+</section>
+{% endif %}

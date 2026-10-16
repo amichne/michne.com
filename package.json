@@ -1,7 +1,7 @@
 {
   "name": "Austin Michne",
   "version": "0.1.0",
-  "description": "Personal blog and photo portfolio with terminal aesthetics",
+  "description": "Personal notebook for software and photography",
   "scripts": {
     "start": "eleventy --serve",
     "build": "eleventy",
