@@ -25,8 +25,8 @@
         function show(theme) {
             document.documentElement.dataset.theme = theme;
             button.setAttribute("aria-pressed", String(theme === "dark"));
-            button.setAttribute("aria-label", theme === "dark" ? "Use paper theme" : "Use ink theme");
-            label.textContent = theme === "dark" ? "Paper" : "Ink";
+            button.setAttribute("aria-label", theme === "dark" ? "Use light theme" : "Use dark theme");
+            label.textContent = theme === "dark" ? "light" : "dark";
         }
         show(readTheme());
         button.hidden = false;

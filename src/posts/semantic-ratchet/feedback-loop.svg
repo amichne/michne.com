@@ -25,9 +25,9 @@
     <text x="240" y="268">Compiler, schemas, assertions</text>
     <text x="240" y="291" fill="#686354" font-size="16">Each examines its own obligation</text>
     <text x="140" y="419">Reject and revise</text>
-    <text x="140" y="442" fill="#8a4230" font-size="16">Keep the diagnostic</text>
+    <text x="140" y="442" fill="#8a4230" font-size="14">Preserve the diagnostic</text>
     <text x="350" y="419">Review behavior</text>
-    <text x="350" y="442" fill="#385e4c" font-size="16">Examine effects</text>
+    <text x="350" y="442" fill="#385e4c" font-size="13">Prove external effects</text>
     <text x="240" y="500" fill="#686354" font-size="15">Acceptance proves only the examined obligations.</text>
   </g>
 </svg>

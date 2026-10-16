@@ -26,7 +26,7 @@
     <text x="125" y="282">Accepted</text>
     <text x="125" y="305" fill="#385e4c" font-size="16">Carries PageSize</text>
     <text x="355" y="282">OutOfRange</text>
-    <text x="355" y="305" fill="#8a4230" font-size="16">Carries raw input</text>
+    <text x="355" y="305" fill="#8a4230" font-size="14">Carries rejected input</text>
     <text x="125" y="386">firstPage</text>
     <text x="125" y="409" fill="#385e4c" font-size="16">Accepts PageSize</text>
   </g>

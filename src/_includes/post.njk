@@ -4,7 +4,7 @@ layout: base.njk
 <div class="post-container">
     <article class="post" data-reading>
         <header class="post-header">
-            <div class="eyebrow"><span class="page-mark" aria-hidden="true">~</span> Engineering note <span class="meta-divider">/</span> <time datetime="{{ date | isoDate }}">{{ date | readableDate }}</time></div>
+            <div class="eyebrow"><span class="page-mark" aria-hidden="true">~</span> <time datetime="{{ date | isoDate }}">{{ date | readableDate }}</time></div>
             <h1>{{ title }}</h1>
             {% if tags %}
             <div class="tags" aria-label="Topics">
@@ -13,13 +13,13 @@ layout: base.njk
             {% endif %}
         </header>
         <div class="post-content">{{ content | safe }}</div>
-        <div class="end-mark" aria-label="End of note">~</div>
+        <div class="end-mark" aria-label="End of post">~</div>
     </article>
     {% set tocContent = content | toc %}
     {% if tocContent %}
     <aside class="reading-rail" aria-label="Reading tools">
         <details class="toc-wrapper" open>
-            <summary class="toc-heading">In this note <span aria-hidden="true">↕</span></summary>
+            <summary class="toc-heading">Table of Contents <span aria-hidden="true">↕</span></summary>
             {{ tocContent | safe }}
         </details>
         <div class="reading-position" hidden>

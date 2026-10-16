@@ -3,7 +3,7 @@ layout: base.njk
 ---
 <article class="photo-post">
     <header class="post-header">
-        <div class="eyebrow"><span class="page-mark" aria-hidden="true">~</span> Photographic record <span class="meta-divider">/</span> <time datetime="{{ date | isoDate }}">{{ date | readableDate }}</time></div>
+        <div class="eyebrow"><span class="page-mark" aria-hidden="true">~</span> <time datetime="{{ date | isoDate }}">{{ date | readableDate }}</time></div>
         <h1>{{ title or (date | readableDate) }}</h1>
         {% if location %}<p class="location">{{ location }}</p>{% endif %}
     </header>
@@ -12,10 +12,10 @@ layout: base.njk
         {% if caption %}<figcaption>{{ caption }}</figcaption>{% endif %}
     </figure>
     <dl class="photo-meta">
-        {% if camera %}<div><dt>Camera</dt><dd>{{ camera }}</dd></div>{% endif %}
-        {% if lens %}<div><dt>Lens</dt><dd>{{ lens }}</dd></div>{% endif %}
-        {% if settings %}<div><dt>Exposure</dt><dd>{{ settings }}</dd></div>{% endif %}
+        {% if camera %}<div><dt>camera:</dt><dd>{{ camera }}</dd></div>{% endif %}
+        {% if lens %}<div><dt>lens:</dt><dd>{{ lens }}</dd></div>{% endif %}
+        {% if settings %}<div><dt>settings:</dt><dd>{{ settings }}</dd></div>{% endif %}
     </dl>
     {% if content %}<div class="post-content">{{ content | safe }}</div>{% endif %}
-    <a class="utility-link" href="/photos/">Photo archive <span class="link-arrow" aria-hidden="true">→</span></a>
+    <a class="utility-link" href="/photos/">view all photos <span class="link-arrow" aria-hidden="true">→</span></a>
 </article>
