@@ -1,14 +1,16 @@
 ---
 layout: base.njk
-title: pix
+title: Photos
 ---
-<h1>$ ls photos/</h1>
+<header class="page-header">
+    <div class="eyebrow"><span class="page-mark" aria-hidden="true">~</span> The archive <span class="meta-divider">/</span> 02</div>
+    <h1>Photographic records.</h1>
+</header>
 <div class="photo-grid">
-  {%- for photo in collections.photos | reverse -%}
-  <a href="{{ photo.url }}" class="photo-grid-item">
-    <img src="{{ photo.data.image }}" alt="{{ photo.data.title }}" loading="lazy">
-    <span class="photo-title">{{ photo.data.title }}</span>
-    <span class="photo-location">{{ photo.data.location }}</span>
-  </a>
-  {%- endfor -%}
+    {% for photo in collections.photos %}
+    <a href="{{ photo.url }}" class="photo-grid-item">
+        <img src="{{ photo.data.image }}" alt="{{ photo.data.title or ('Photograph from ' + (photo.date | readableDate)) }}" loading="lazy">
+        <span class="photo-caption"><time datetime="{{ photo.date | isoDate }}">{{ photo.date | readableDate }}</time><span>{{ photo.data.camera }}</span><span class="link-arrow" aria-hidden="true">↗</span></span>
+    </a>
+    {% endfor %}
 </div>

@@ -34,6 +34,7 @@ module.exports = function (eleventyConfig) {
 
     // Copy assets
     eleventyConfig.addPassthroughCopy("src/css");
+    eleventyConfig.addPassthroughCopy("src/js");
     eleventyConfig.addPassthroughCopy("src/photos");
     eleventyConfig.addPassthroughCopy("src/posts/semantic-ratchet");
     eleventyConfig.addPassthroughCopy({".nojekyll": ".nojekyll"});
@@ -41,6 +42,17 @@ module.exports = function (eleventyConfig) {
     // Date filter
     eleventyConfig.addFilter("readableDate", dateObj => {
         return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toFormat("yyyy-MM-dd");
+    });
+
+    eleventyConfig.addFilter("isoDate", dateObj => {
+        return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toISODate();
+    });
+
+    eleventyConfig.addFilter("pageSection", url => {
+        if (url.startsWith("/posts/")) return "notes";
+        if (url.startsWith("/photos/")) return "photos";
+        if (url.startsWith("/about/")) return "about";
+        return "index";
     });
 
     // Random filter

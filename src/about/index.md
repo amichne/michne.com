@@ -3,6 +3,8 @@ layout: base.njk
 title: About
 ---
 
-# $ cat about.txt
+# About this notebook
 
-Go read the <a href="/posts/2025-10-25-typed-feature-flags/index.html">post</a> not this file. 
+This notebook contains engineering notes and photographs by Austin Michne.
+
+[Read the notes](/posts/) or [visit the photo archive](/photos/).

@@ -2,28 +2,20 @@
 layout: base.njk
 ---
 <article class="photo-post">
-  <header class="post-header">
-    <h1>{{ title }}</h1>
-    <time datetime="{{ date }}">{{ date | readableDate }}</time>
-    <p class="location">{{ location }}</p>
-  </header>
-
-  <figure class="photo-main">
-    <img src="{{ image }}" alt="{{ title }}" loading="lazy">
-    {% if caption %}
-    <figcaption>{{ caption }}</figcaption>
-    {% endif %}
-  </figure>
-
-  <div class="photo-meta">
-    {% if camera %}<p><span class="meta-label">camera:</span> {{ camera }}</p>{% endif %}
-    {% if lens %}<p><span class="meta-label">lens:</span> {{ lens }}</p>{% endif %}
-    {% if settings %}<p><span class="meta-label">settings:</span> {{ settings }}</p>{% endif %}
-  </div>
-
-  {% if content %}
-  <div class="post-content">
-    {{ content | safe }}
-  </div>
-  {% endif %}
+    <header class="post-header">
+        <div class="eyebrow"><span class="page-mark" aria-hidden="true">~</span> Photographic record <span class="meta-divider">/</span> <time datetime="{{ date | isoDate }}">{{ date | readableDate }}</time></div>
+        <h1>{{ title or (date | readableDate) }}</h1>
+        {% if location %}<p class="location">{{ location }}</p>{% endif %}
+    </header>
+    <figure class="photo-main">
+        <img src="{{ image }}" alt="{{ title or ('Photograph from ' + (date | readableDate)) }}">
+        {% if caption %}<figcaption>{{ caption }}</figcaption>{% endif %}
+    </figure>
+    <dl class="photo-meta">
+        {% if camera %}<div><dt>Camera</dt><dd>{{ camera }}</dd></div>{% endif %}
+        {% if lens %}<div><dt>Lens</dt><dd>{{ lens }}</dd></div>{% endif %}
+        {% if settings %}<div><dt>Exposure</dt><dd>{{ settings }}</dd></div>{% endif %}
+    </dl>
+    {% if content %}<div class="post-content">{{ content | safe }}</div>{% endif %}
+    <a class="utility-link" href="/photos/">Photo archive <span class="link-arrow" aria-hidden="true">→</span></a>
 </article>
