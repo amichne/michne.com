@@ -35,6 +35,7 @@ module.exports = function (eleventyConfig) {
     // Copy assets
     eleventyConfig.addPassthroughCopy("src/css");
     eleventyConfig.addPassthroughCopy("src/photos");
+    eleventyConfig.addPassthroughCopy("src/posts/semantic-ratchet");
     eleventyConfig.addPassthroughCopy({".nojekyll": ".nojekyll"});
 
     // Date filter

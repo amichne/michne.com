@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="450" viewBox="0 0 480 450" role="img" aria-labelledby="title desc">
+  <title id="title">Preserve the established fact</title>
+  <desc id="desc">A parser accepts an untrusted integer. Success gives a PageSize to firstPage. Rejection gives OutOfRange to the caller.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8aa6cc"/></marker>
+  </defs>
+  <rect width="480" height="450" rx="8" fill="#152033"/>
+  <g fill="none" stroke="#8aa6cc" stroke-width="2" marker-end="url(#arrow)">
+    <path d="M240 92V132"/>
+    <path d="M240 196V222H125V254"/>
+    <path d="M240 196V222H355V254"/>
+    <path d="M125 318V358"/>
+  </g>
+  <g stroke-width="1.5">
+    <rect x="90" y="28" width="300" height="64" rx="8" fill="#23324b" stroke="#8aa6cc"/>
+    <rect x="90" y="132" width="300" height="64" rx="8" fill="#23324b" stroke="#8aa6cc"/>
+    <rect x="25" y="254" width="200" height="64" rx="8" fill="#173c3b" stroke="#6bd1b3"/>
+    <rect x="255" y="254" width="200" height="64" rx="8" fill="#442e38" stroke="#edabb5"/>
+    <rect x="25" y="358" width="200" height="64" rx="8" fill="#173c3b" stroke="#6bd1b3"/>
+  </g>
+  <g fill="#f2f6fc" font-family="system-ui, sans-serif" font-size="19" text-anchor="middle">
+    <text x="240" y="56">Untrusted integer</text>
+    <text x="240" y="79" fill="#b7c9e2" font-size="16">No range established</text>
+    <text x="240" y="160">PageSize.parse</text>
+    <text x="240" y="183" fill="#b7c9e2" font-size="16">Accept only 1 through 100</text>
+    <text x="125" y="282">Accepted</text>
+    <text x="125" y="305" fill="#9be5ce" font-size="16">Carries PageSize</text>
+    <text x="355" y="282">OutOfRange</text>
+    <text x="355" y="305" fill="#f4c0c8" font-size="16">Carries rejected input</text>
+    <text x="125" y="386">firstPage</text>
+    <text x="125" y="409" fill="#9be5ce" font-size="16">Accepts PageSize</text>
+  </g>
+</svg>

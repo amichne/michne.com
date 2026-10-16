@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="510" viewBox="0 0 480 510" role="img" aria-labelledby="title desc">
+  <title id="title">Compiler phases preserve earlier decisions</title>
+  <desc id="desc">This conceptual pipeline moves from source through syntax, resolved symbols, and typed operations to executable code. Actual compiler pipelines vary.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8aa6cc"/></marker>
+  </defs>
+  <rect width="480" height="510" rx="8" fill="#152033"/>
+  <g fill="none" stroke="#8aa6cc" stroke-width="2" marker-end="url(#arrow)">
+    <path d="M240 92V128"/><path d="M240 190V226"/><path d="M240 288V324"/><path d="M240 386V422"/>
+  </g>
+  <g fill="#23324b" stroke="#8aa6cc" stroke-width="1.5">
+    <rect x="50" y="30" width="380" height="62" rx="8"/>
+    <rect x="50" y="128" width="380" height="62" rx="8"/>
+    <rect x="50" y="226" width="380" height="62" rx="8"/>
+    <rect x="50" y="324" width="380" height="62" rx="8"/>
+    <rect x="50" y="422" width="380" height="62" rx="8" fill="#173c3b" stroke="#6bd1b3"/>
+  </g>
+  <g fill="#f2f6fc" font-family="system-ui, sans-serif" font-size="20" text-anchor="middle">
+    <text x="240" y="58">Source</text><text x="240" y="80" fill="#b7c9e2" font-size="16">Text to interpret</text>
+    <text x="240" y="156">Syntax tree</text><text x="240" y="178" fill="#b7c9e2" font-size="16">Explicit structure</text>
+    <text x="240" y="254">Resolved symbols</text><text x="240" y="276" fill="#b7c9e2" font-size="16">Declaration identity</text>
+    <text x="240" y="352">Typed operations</text><text x="240" y="374" fill="#b7c9e2" font-size="16">Encoded type obligations</text>
+    <text x="240" y="450">Executable code</text><text x="240" y="472" fill="#9be5ce" font-size="16">Runtime behavior still needs evidence</text>
+  </g>
+</svg>
