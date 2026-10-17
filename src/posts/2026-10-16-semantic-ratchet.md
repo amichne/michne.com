@@ -7,19 +7,31 @@ tags: ["type-safe", "design", "AI", "Kotlin"]
 permalink: /posts/semantic-ratchet/
 ---
 
-When a program establishes a fact, its representation must preserve that fact wherever later behavior needs it.
-That is the **Semantic Ratchet**.
-A parser produces a stronger value.
-A consumer accepts that value.
-The next operation starts with the knowledge that the previous operation established.
+Imagine an agent with a task: email a receipt.
+The function it finds takes two strings, `customerId` and `email`.
+It passes them in the wrong order.
+The code compiles, but the receipt goes to the wrong place or fails to send.
 
-This principle matters for humans and AI agents alike.
+A human can make the same mistake but remember the convention from last week's review.
+Unless the agent receives that context, it must infer the convention from names, types, and the prompt.
+When both types are `String`, the signature loses the distinction that the domain needs.
+
+Programs forget this way all the time.
+A validator accepts an email as well-formed, then returns a `String`.
+Authentication identifies the caller, then passes along an ordinary request.
+Every later step must derive again, or simply assume, what an earlier step already knew.
+
+I call the fix the **Semantic Ratchet**.
+A ratchet turns one way and resists reverse movement.
+When a program establishes a fact, its representation must carry that fact forward.
+Later code must accept that representation instead of an unchecked primitive.
+A parser returns a stronger value.
+The next function accepts only that value.
+
 A comment asks the next author to remember a rule.
-A constrained type lets the compiler reject a call that breaks the rule.
-
-Language models generate plausible continuations from context.
-Ambiguous identifiers, hidden invariants, nullable fields, and convention-dependent APIs leave more interpretations open.
-The author must infer which interpretation matches the domain.
+A constrained type makes the compiler remember it.
+This differs from a CI ratchet that records existing violations and rejects new ones.
+Here, the ratchet lives in the types.
 
 More context can help.
 Prompts, repository summaries, examples, and memory can explain intent.
@@ -126,6 +138,72 @@ That implementation still needs review and executable evidence.
   <figcaption>The parser establishes the range. The consumer accepts the value that preserves it.</figcaption>
 </figure>
 
+*`PageSize` is one click. A ratchet needs several.*
+Here, authentication produces a principal, authorization produces a permit, and the write accepts that permit:
+
+```kotlin
+class Principal private constructor(val userId: String) {
+    companion object {
+        fun authenticate(token: String): Authentication =
+            userIdFor(token)?.let { Authentication.Authenticated(Principal(it)) }
+                ?: Authentication.Rejected
+    }
+}
+
+sealed interface Authentication {
+    data class Authenticated(val principal: Principal) : Authentication
+    data object Rejected : Authentication
+}
+
+class CanEdit private constructor(val document: DocumentId) {
+    companion object {
+        fun check(who: Principal, doc: Document): EditCheck =
+            if (who.userId in doc.editors) EditCheck.Granted(CanEdit(doc.id))
+            else EditCheck.Denied(who.userId, doc.id)
+    }
+}
+
+sealed interface EditCheck {
+    data class Granted(val permit: CanEdit) : EditCheck
+    data class Denied(val userId: String, val document: DocumentId) : EditCheck
+}
+
+fun saveEdit(permit: CanEdit, text: String): Revision =
+    writeRevision(permit.document, text)
+```
+
+The caller must handle rejection at each step:
+
+```kotlin
+fun handleEdit(token: String, doc: Document, text: String): Response =
+    when (val auth = Principal.authenticate(token)) {
+        Authentication.Rejected -> Response.Unauthorized
+        is Authentication.Authenticated ->
+            when (val check = CanEdit.check(auth.principal, doc)) {
+                is EditCheck.Denied -> Response.Forbidden
+                is EditCheck.Granted -> Response.Saved(saveEdit(check.permit, text))
+            }
+    }
+```
+
+Each protected step accepts proof from the previous step.
+`saveEdit` takes no separate document ID because the permit carries it.
+The caller cannot pass a permit for one document and an ID for another.
+Private constructors prevent external callers from constructing either `Principal` or `CanEdit`.
+
+The example omits `Document`, `DocumentId`, `Revision`, and `Response` definitions.
+The `userIdFor` adapter returns a user ID for an accepted token or `null` for rejection.
+`authenticate` converts that nullable result into the closed `Authentication` outcome.
+The `writeRevision` adapter writes to `permit.document`.
+These adapters stand for authentication and storage operations whose implementations depend on the application.
+
+The permit proves that the permission check passed when it was issued.
+This sketch binds the edit action and document.
+A production capability must bind the principal, action, resource, and version or lifetime that the policy needs.
+Expiry and revocation still belong to the adapter that does the write.
+That adapter needs the identity and policy data necessary to establish freshness.
+The sketch omits those details and does not prove current permission at write time.
+
 ## Close the expected outcomes
 
 `PageSizeParse` also closes the set of expected outcomes.
@@ -164,19 +242,11 @@ Later phases then consume the resolved identity instead of guessing from the spe
   <figcaption>This conceptual compiler pipeline shows how later phases consume earlier decisions.</figcaption>
 </figure>
 
-Application code can use the same progression.
-Raw input becomes parsed intent.
-Authentication establishes a principal.
-Authorization produces a capability for a particular action and resource.
-The operation accepts that capability rather than an unrelated Boolean and a separate resource.
-
-The capability's meaning depends on its construction and scope.
-It must bind the principal, action, resource, and version or lifetime that the policy needs.
-A capability for one document does not authorize another document.
+The edit example uses the same progression: a token becomes a principal, then a permit, then a revision.
+Each consumer accepts the representation that carries the fact it needs.
 
 External facts can change.
 A permission can expire, and another transaction can change an account.
-The effect adapter must establish freshness where the operation needs it.
 Ordinary Kotlin types do not prove single use, prevent capability reuse, or establish transaction isolation.
 
 Keep pure decisions separate from filesystem, network, clock, and database effects.
