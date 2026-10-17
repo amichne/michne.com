@@ -35,6 +35,7 @@ module.exports = function (eleventyConfig) {
     // Copy assets
     eleventyConfig.addPassthroughCopy("src/css");
     eleventyConfig.addPassthroughCopy("src/js");
+    eleventyConfig.addPassthroughCopy("src/images");
     eleventyConfig.addPassthroughCopy("src/photos");
     eleventyConfig.addPassthroughCopy("src/posts/semantic-ratchet");
     eleventyConfig.addPassthroughCopy({".nojekyll": ".nojekyll"});
@@ -91,6 +92,20 @@ module.exports = function (eleventyConfig) {
     });
     // Image shortcode
     eleventyConfig.addNunjucksAsyncShortcode("image", imageShortcode);
+    eleventyConfig.addNunjucksAsyncShortcode("siteLogo", async function () {
+        const metadata = await Image("src/images/michne-mark.png", {
+            widths: [44, 88],
+            formats: ["webp", "png"],
+            outputDir: "./_site/img/",
+            urlPath: "/img/"
+        });
+        return Image.generateHTML(metadata, {
+            alt: "",
+            sizes: "44px",
+            class: "brand-mark",
+            decoding: "async"
+        });
+    });
 
     // Collections
     eleventyConfig.addCollection("posts", function (collectionApi) {

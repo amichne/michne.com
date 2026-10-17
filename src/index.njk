@@ -3,15 +3,14 @@ layout: base.njk
 title: Home
 ---
 <section class="intro" aria-labelledby="intro-title">
-    <h1 id="intro-title">╭─ [<a href="mailto:austin@michne.com">austin@michne.com</a>] ~/personal {<a href="https://github.com/amichne">github</a>}
-        <br>
-        ╰─➤ cat /Users/amichne/README.md
-    </h1>
-    <h2> &gt; Backend Engineer @ American Express</h2>
-    <h2> &gt; Why write code when you could write bugs</h2>
+    <div class="intro-copy">
+        <h1 id="intro-title">{{ site.author }}</h1>
+        <p class="intro-role">Backend Engineer @ American Express</p>
+    </div>
+    <div class="intro-links"><a href="mailto:austin@michne.com">Email</a><a href="https://github.com/amichne">GitHub <span aria-hidden="true">↗</span></a></div>
 </section>
 <section class="recent-posts" aria-labelledby="recent-notes">
-    <div class="section-heading"><h2 id="recent-notes">&RightTeeArrow; Recent Posts</h2><a class="utility-link" href="/posts/">view all posts <span class="link-arrow" aria-hidden="true">→</span></a></div>
+    <div class="section-heading"><h2 id="recent-notes">Recent posts</h2><a class="utility-link" href="/posts/">All posts <span class="link-arrow" aria-hidden="true">→</span></a></div>
     <ol class="post-list">
         {% for post in collections.posts %}
         <li><time datetime="{{ post.date | isoDate }}">{{ post.date | readableDate }}</time><a href="{{ post.url }}"><span>{{ post.data.title }}</span><span class="link-arrow" aria-hidden="true">↗</span></a></li>
@@ -21,15 +20,11 @@ title: Home
 {% set photos = collections.photos %}
 {% if photos.length %}
 {% set photo = photos[0] %}
-<section class="recent-photos" aria-labelledby="selected-frame">
-    <div class="section-heading"><h2 id="selected-frame" class="shell-heading">&percnt; open &dollar;((&dollar;RANDOM &percnt; &dollar;#PHOTOS[@]}))</h2><button class="utility-link shuffle-photo" type="button" hidden>Another frame <span class="link-arrow" aria-hidden="true">↗</span></button></div>
-    <figure class="archive-frame">
-        <a href="{{ photo.url }}" data-photo-link><img src="{{ photo.data.image }}" alt="Photograph from {{ photo.date | readableDate }}" data-photo-image fetchpriority="high"></a>
-        <figcaption><span data-photo-caption>{{ photo.data.camera }} <span class="meta-divider">/</span> {{ photo.date | readableDate }}</span><a class="utility-link" href="/photos/">view all photos <span class="link-arrow" aria-hidden="true">→</span></a></figcaption>
-    </figure>
-    <div class="photo-sources" hidden>
-        {% for entry in photos %}<span data-photo-src="{{ entry.data.image }}" data-photo-url="{{ entry.url }}" data-photo-date="{{ entry.date | readableDate }}" data-photo-camera="{{ entry.data.camera }}"></span>{% endfor %}
+<section class="home-photo" aria-labelledby="selected-frame">
+    <a class="home-photo-image" href="{{ photo.url }}">{% image photo.data.image, "Photograph from " + (photo.date | readableDate), "(max-width: 599px) 76px, (max-width: 959px) 120px, 154px" %}</a>
+    <div>
+        <h2 id="selected-frame"><a href="/photos/">Photographs <span class="link-arrow" aria-hidden="true">→</span></a></h2>
+        <p>Latest frame <span class="meta-divider">/</span> <time datetime="{{ photo.date | isoDate }}">{{ photo.date | readableDate }}</time></p>
     </div>
-    <p class="sr-only" data-photo-status aria-live="polite"></p>
 </section>
 {% endif %}

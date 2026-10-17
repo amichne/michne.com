@@ -3,7 +3,7 @@ layout: base.njk
 ---
 <article class="photo-post">
     <header class="post-header">
-        <div class="eyebrow"><span class="page-mark" aria-hidden="true">~</span> <time datetime="{{ date | isoDate }}">{{ date | readableDate }}</time></div>
+        <div class="eyebrow"><span>{{ site.author }}</span><time datetime="{{ date | isoDate }}">{{ date | readableDate }}</time></div>
         <h1>{{ title or (date | readableDate) }}</h1>
         {% if location %}<p class="location">{{ location }}</p>{% endif %}
     </header>

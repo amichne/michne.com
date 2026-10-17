@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% set section = page.url | pageSection %}
-<html lang="en" data-theme="light" data-section="{{ section }}">
+<html lang="en" data-theme="dark" data-section="{{ section }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,29 +10,30 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <script src="/js/site.js" defer></script>
 </head>
 <body id="top">
 <a class="skip-link" href="#main">Skip to content</a>
-<div class="notebook">
+<div class="site-frame">
+    <div class="shell-titlebar" aria-hidden="true"><span class="window-square"></span><span class="window-path">michne — {{ page.url }}</span><span class="window-lines"></span></div>
     <header class="site-header">
         <a href="/" class="wordmark" aria-label="$ whoami, home">
-            <span class="tilde" aria-hidden="true">~</span>
-            <span>{{ site.title }}</span>
+            {% siteLogo %}
+            <span>{{ site.title }}<span class="cursor" aria-hidden="true">_</span></span>
         </a>
         <nav class="site-nav" aria-label="Main navigation">
             <a href="/posts/" {% if section == "notes" %}aria-current="location"{% endif %}>posts</a>
             <a href="/photos/" {% if section == "photos" %}aria-current="location"{% endif %}>photos</a>
             <a href="/about/" {% if section == "about" %}aria-current="location"{% endif %}>about</a>
-            <button class="theme-toggle" type="button" aria-label="Use dark theme" aria-pressed="false" hidden>
-                <span class="theme-dot" aria-hidden="true"></span><span data-theme-label>dark</span>
+            <button class="theme-toggle" type="button" aria-label="Use light theme" aria-pressed="true" hidden>
+                <span data-theme-label>light</span>
             </button>
         </nav>
     </header>
     <main id="main" tabindex="-1">{{ content | safe }}</main>
     <footer class="site-footer">
-        <span><span class="footer-tilde" aria-hidden="true">~</span> {{ site.author }} &middot; Built with 11ty</span>
+        <span class="footer-credit"><span class="signature" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>{{ site.author }}</span>
         <a href="#top">Back to top <span class="link-arrow" aria-hidden="true">↑</span></a>
     </footer>
 </div>

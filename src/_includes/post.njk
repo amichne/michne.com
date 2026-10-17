@@ -4,8 +4,9 @@ layout: base.njk
 <div class="post-container">
     <article class="post" data-reading>
         <header class="post-header">
-            <div class="eyebrow"><span class="page-mark" aria-hidden="true">~</span> <time datetime="{{ date | isoDate }}">{{ date | readableDate }}</time></div>
-            <h1>{{ title }}</h1>
+            <div class="eyebrow"><span>{{ site.author }}</span><time datetime="{{ date | isoDate }}">{{ date | readableDate }}</time></div>
+            {% set titleParts = title.split(": ") %}
+            <h1>{% if titleParts.length == 2 %}<span class="title-context">{{ titleParts[0] }}: </span><span class="title-headline">{{ titleParts[1] }}</span>{% else %}{{ title }}{% endif %}</h1>
             {% if tags %}
             <div class="tags" aria-label="Topics">
                 {% for tag in tags %}{% if tag != "posts" %}<span class="tag">{{ tag }}</span>{% endif %}{% endfor %}
@@ -13,11 +14,12 @@ layout: base.njk
             {% endif %}
         </header>
         <div class="post-content">{{ content | safe }}</div>
-        <div class="end-mark" aria-label="End of post">~</div>
+        <div class="end-mark" aria-label="End of post"></div>
     </article>
     {% set tocContent = content | toc %}
     {% if tocContent %}
     <aside class="reading-rail" aria-label="Reading tools">
+        <a class="back-link" href="/posts/">← All posts</a>
         <details class="toc-wrapper" open>
             <summary class="toc-heading">Table of Contents <span aria-hidden="true">↕</span></summary>
             {{ tocContent | safe }}

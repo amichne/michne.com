@@ -1,0 +1,115 @@
+---
+permalink: /design-study/
+eleventyExcludeFromCollections: true
+---
+<!DOCTYPE html>
+<html lang="en" data-type="ad" data-mode="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Print &amp; prompt — a design study</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/design-study.css">
+  <script src="/js/design-study.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#article">Skip to article</a>
+  <header class="study-controls">
+    <div class="study-control-inner">
+      <span class="study-label">Print &amp; prompt <span aria-hidden="true">/</span> Study 02</span>
+      <div class="type-options" role="group" aria-label="Serif treatment">
+        <span class="control-label">Typography</span>
+        <button type="button" data-type-choice="ad" aria-pressed="true">Ad serif</button>
+        <button type="button" data-type-choice="book" aria-pressed="false">Book serif</button>
+      </div>
+      <button class="mode-control" type="button" data-mode-toggle aria-pressed="false">Use dark paper</button>
+    </div>
+  </header>
+
+  <p class="study-caption" data-type-description>A narrow serif leads the headline. Garamond carries the prose.</p>
+
+  <div class="page-shell" id="top">
+    <div class="shell-titlebar" aria-hidden="true"><span class="window-square"></span><span>michne / posts / semantic-ratchet</span><span class="window-lines"></span></div>
+    <header class="masthead">
+      <a class="wordmark" href="/" aria-label="$ whoami, home"><img class="brand-mark" src="/images/michne-mark.png" alt="" width="44" height="44"><span>{{ site.title }}<span class="cursor" aria-hidden="true">_</span></span></a>
+      <nav aria-label="Main navigation"><a href="/posts/" aria-current="location">posts</a><a href="/photos/">photos</a><a href="/about/">about</a></nav>
+    </header>
+
+    <main class="article-layout" id="article" tabindex="-1">
+      <aside class="article-rail" aria-label="Article contents">
+        <a class="back-link" href="/posts/">← All posts</a>
+        <div class="rail-section"><span class="rail-label">In this article</span><ol><li><a href="#remember">The idea</a></li><li><a href="#state-space">Reduce the state space</a></li><li><a href="#preserve">Preserve the fact</a></li><li><a href="#types">Carry it forward</a></li></ol></div>
+        <a class="rail-next" href="/posts/2025-10-25-typed-feature-flags/">Also in the archive<span>Typed Feature Flags <span aria-hidden="true">↗</span></span></a>
+      </aside>
+
+      <article>
+        <header class="article-header">
+          <div class="article-meta"><span class="path">The Semantic Ratchet</span><time datetime="2026-10-16">2026-10-16</time></div>
+          <h1>Let the compiler<br>remember<span class="title-dot">.</span></h1>
+          <div class="header-foot"><span>{{ site.author }}</span><span>Type-safe design <span aria-hidden="true">/</span> Kotlin</span></div>
+        </header>
+
+        <section class="prose" id="remember">
+          <p class="lead">When a program establishes a fact, its representation must preserve that fact wherever later behavior needs it.</p>
+          <p>That is the <strong>Semantic Ratchet</strong>. A parser produces a stronger value. A consumer accepts that value. The next operation starts with the knowledge that the previous operation established.</p>
+          <p>This principle matters for humans and AI agents alike. A comment asks the next author to remember a rule. A constrained type lets the compiler reject a call that breaks the rule.</p>
+        </section>
+
+        <section class="prose" id="state-space">
+          <h2><span class="section-number">01</span>Reduce the state space</h2>
+          <p>Consider this interface:</p>
+          <figure class="code-window">
+            <figcaption class="code-titlebar"><span class="window-square" aria-hidden="true"></span><span>receipt.kt</span><span class="code-language">Kotlin</span></figcaption>
+            <pre tabindex="0" aria-label="Receipt function with string arguments"><code><span class="kw">fun</span> <span class="fn">sendReceipt</span>(customerId: <span class="type">String</span>, email: <span class="type">String</span>)</code></pre>
+          </figure>
+          <p>A caller can reverse the arguments or pass an unrelated string. Those calls remain type-correct.</p>
+          <p>Now give each concept a distinct type:</p>
+          <figure class="code-window">
+            <figcaption class="code-titlebar"><span class="window-square" aria-hidden="true"></span><span>receipt.kt</span><span class="code-language">Kotlin</span></figcaption>
+            <pre tabindex="0" aria-label="Receipt function with distinct domain types"><code><span class="kw">fun</span> <span class="fn">sendReceipt</span>(
+    customerId: <span class="type">CustomerId</span>,
+    email: <span class="type">EmailAddress</span>,
+)</code></pre>
+          </figure>
+          <p>The compiler rejects swapped arguments. It does not prove that the caller chose the correct customer or address.</p>
+        </section>
+
+        <section class="prose" id="preserve">
+          <h2><span class="section-number">02</span>Preserve the fact</h2>
+          <p>A page size must lie between 1 and 100. The parser accepts an external integer. Success carries a <code>PageSize</code>. Rejection carries the supplied integer in a distinct case.</p>
+          <figure class="flow-figure">
+            <div class="figure-heading"><span>Fig. 01</span><span>Parse → preserve → consume</span></div>
+            <div class="flow" role="img" aria-label="An untrusted integer enters PageSize.parse. Accepted values carry PageSize to firstPage. OutOfRange returns to the caller.">
+              <div class="flow-node raw"><span>External input</span><strong>Int</strong><small>untrusted</small></div>
+              <div class="flow-arrow" aria-hidden="true">→</div>
+              <div class="flow-node parser"><span>Establish the fact</span><strong>PageSize.parse</strong><small>1 ≤ n ≤ 100</small></div>
+              <div class="flow-arrow" aria-hidden="true">→</div>
+              <div class="flow-node accepted"><span>Carry the fact</span><strong>PageSize</strong><small>→ firstPage</small></div>
+              <div class="rejection"><span aria-hidden="true">└─</span> OutOfRange → caller</div>
+            </div>
+            <figcaption>The parser establishes the range. The consumer accepts the value that preserves it.</figcaption>
+          </figure>
+        </section>
+
+        <section class="prose" id="types">
+          <h2><span class="section-number">03</span>Carry it forward</h2>
+          <figure class="code-window">
+            <figcaption class="code-titlebar"><span class="window-square" aria-hidden="true"></span><span>page.kt</span><span class="code-language">Kotlin</span></figcaption>
+            <pre tabindex="0" aria-label="A consumer accepts the constrained PageSize"><code><span class="kw">fun</span> &lt;T&gt; <span class="fn">firstPage</span>(items: <span class="type">List</span>&lt;T&gt;, size: <span class="type">PageSize</span>): <span class="type">List</span>&lt;T&gt; =
+    size.<span class="fn">takeFrom</span>(items)</code></pre>
+          </figure>
+          <p><code>firstPage(items, 0)</code> fails to compile. <code>PageSize(0)</code> also fails because the constructor is private.</p>
+          <p>The compiler does not prove that the parser implements the intended range. That implementation still needs review and executable evidence.</p>
+          <a class="continue-link" href="/posts/semantic-ratchet/">Read the complete article <span aria-hidden="true">↗</span></a>
+        </section>
+        <div class="end-mark" aria-hidden="true"></div>
+      </article>
+    </main>
+    <footer class="page-footer"><span>Austin Michne · Built with 11ty</span><a href="#top">Back to top ↑</a></footer>
+  </div>
+  <div class="study-status" role="status" aria-live="polite"></div>
+</body>
+</html>

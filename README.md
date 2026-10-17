@@ -13,8 +13,9 @@ Site runs at http://localhost:8080
 
 ## Features
 
-- Paper and ink themes with a saved preference
-- Serif prose, monospace labels, and a repeated tilde mark
+- A soft charcoal default, a light theme, and a saved preference
+- Iowan Old Style headlines, Cormorant Garamond prose, and IBM Plex Mono labels
+- A split-circle logo and a square window frame
 - A responsive photo archive
 - Markdown content with camera metadata for photos
 - A section index and reading position for posts
@@ -26,7 +27,8 @@ Site runs at http://localhost:8080
 - `src/photos/` - Photo posts with metadata
 - `src/_includes/` - Layout templates
 - `src/css/` - Styles
-- `src/js/site.js` - Theme control, code copy, section index, and photo selection
+- `src/images/` - Source images, including the site logo
+- `src/js/site.js` - Theme control, code copy, and section index
 
 ## Adding Content
 
@@ -67,8 +69,12 @@ Place images in `src/photos/` directory.
 ## Customization
 
 Change `--paper`, `--ink`, `--accent`, and `--rule` in `src/css/style.css`.
-The default palette uses warm paper. `[data-theme="dark"]` defines the ink theme.
-Each section repeats its accent in the tilde mark, navigation, and links.
+The default theme uses soft charcoal. `[data-theme="light"]` uses a neutral light palette.
+Each section repeats its accent in navigation, links, and controls.
+Six signature colors appear in the footer and code syntax.
+The shared layout pairs an old-style serif with the window frame from the design study.
+Eleventy makes small logo images and a responsive photo preview during the build.
+The logo source is `src/images/michne-mark.png`. Eleventy owns the ignored `_site/` output and `.cache/` downloads.
 
 `src/js/site.js` owns the interactive controls.
 The site keeps its content and links when JavaScript is unavailable.

@@ -3,9 +3,9 @@
 
     function readTheme() {
         try {
-            return localStorage.getItem("theme") === "dark" ? "dark" : "light";
+            return localStorage.getItem("theme") === "light" ? "light" : "dark";
         } catch (error) {
-            if (error instanceof DOMException && error.name === "SecurityError") return "light";
+            if (error instanceof DOMException && error.name === "SecurityError") return "dark";
             throw error;
         }
     }
@@ -107,7 +107,18 @@
         details.open = desktop.matches;
         desktop.addEventListener("change", event => { details.open = event.matches; });
         const links = Array.from(details.querySelectorAll('a[href^="#"]'));
-        const entries = links.map(link => ({link, heading: document.getElementById(decodeURIComponent(link.hash.slice(1)))})).filter(entry => entry.heading);
+        const colors = ["red", "green", "yellow", "blue", "purple", "cyan"];
+        const entries = links
+            .map(link => ({link, heading: document.getElementById(decodeURIComponent(link.hash.slice(1)))}))
+            .filter(entry => entry.heading && article.contains(entry.heading))
+            .map((entry, index) => ({...entry, color: colors[index % colors.length]}));
+        const destinations = new Map(entries.map(entry => [entry.link.hash, entry]));
+        for (const entry of entries) entry.heading.dataset.readingColor = entry.color;
+        for (const link of document.querySelectorAll('a[href*="#"]')) {
+            if (link.origin !== window.location.origin || link.pathname !== window.location.pathname || link.search !== window.location.search) continue;
+            const destination = destinations.get(link.hash);
+            if (destination) link.dataset.readingColor = destination.color;
+        }
         const position = rail.querySelector(".reading-position");
         const progress = position.querySelector("progress");
         const percent = position.querySelector("output");
@@ -120,14 +131,19 @@
             progress.value = value;
             progress.textContent = `${value}%`;
             percent.textContent = `${value}%`;
-            let current = entries[0];
+            let current;
             for (const entry of entries) {
                 if (entry.heading.getBoundingClientRect().top <= 120) current = entry;
             }
+            const last = entries[entries.length - 1];
+            const atPageEnd = window.scrollY > 0 && Math.ceil(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight;
+            if (atPageEnd && last && last.heading.getBoundingClientRect().top < window.innerHeight) current = last;
             for (const entry of entries) {
                 if (entry === current) entry.link.setAttribute("aria-current", "location");
                 else entry.link.removeAttribute("aria-current");
             }
+            if (current) position.dataset.readingColor = current.color;
+            else delete position.dataset.readingColor;
             scheduled = false;
         }
         function schedule() {
@@ -141,41 +157,7 @@
         update();
     }
 
-    function initializePhotos() {
-        const button = document.querySelector(".shuffle-photo");
-        if (!button) return;
-        const entries = Array.from(document.querySelectorAll("[data-photo-src]"));
-        if (entries.length < 2) return;
-        const image = document.querySelector("[data-photo-image]");
-        const link = document.querySelector("[data-photo-link]");
-        const caption = document.querySelector("[data-photo-caption]");
-        const status = document.querySelector("[data-photo-status]");
-        let current = 0;
-        button.hidden = false;
-        button.addEventListener("click", () => {
-            const next = (current + 1 + Math.floor(Math.random() * (entries.length - 1))) % entries.length;
-            const entry = entries[next].dataset;
-            const pending = new Image();
-            button.disabled = true;
-            pending.addEventListener("load", () => {
-                image.src = entry.photoSrc;
-                image.alt = `Photograph from ${entry.photoDate}`;
-                link.href = entry.photoUrl;
-                caption.textContent = `${entry.photoCamera} / ${entry.photoDate}`;
-                current = next;
-                status.textContent = `Photograph from ${entry.photoDate}.`;
-                button.disabled = false;
-            }, {once: true});
-            pending.addEventListener("error", () => {
-                status.textContent = "This photograph did not load. Try another frame.";
-                button.disabled = false;
-            }, {once: true});
-            pending.src = entry.photoSrc;
-        });
-    }
-
     initializeTheme();
     initializeCode();
     initializeReading();
-    initializePhotos();
 })();
